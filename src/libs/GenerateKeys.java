@@ -1,82 +1,114 @@
 package libs;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.Random;
 import libs.*;
 
 public class GenerateKeys {
+    private final static BigInteger one      = new BigInteger("1");
+    private final static SecureRandom random = new SecureRandom();
 
-    private int p;
-    private int q;
-    private long n;
+    private BigInteger p;
+    private BigInteger q;
+    private BigInteger n;
+    private BigInteger e;
+    private BigInteger d;
+    private BigInteger phi;
 
-    public int getP() {
+    public GenerateKeys(int N) {
+
+        //Get Randome two big prime numbers (p,q)
+        this.p = BigInteger.probablePrime(N/2, random);
+        this.q = BigInteger.probablePrime(N/2, random);
+
+        //phi = (p - 1)*(q - 1)
+        this.phi = (this.p.subtract(one)).multiply(this.q.subtract(one));
+
+        //n = q*p
+        this.n = this.p.multiply(this.q);
+
+        //Get random number e from 1 to phi so that gcd(e, phi) = 1
+        this.e = BigInteger.probablePrime(N / 2, random);
+
+        while (this.phi.gcd(this.e).compareTo(one) > 0 && this.e.compareTo(this.phi) < 0)
+        {
+            this.e.add(one);
+        }
+        this.d = this.e.modInverse(phi);
+    }
+
+    public GenerateKeys(BigInteger P, BigInteger Q, int N) {
+        this.q = Q;
+        this.p = P;
+        this.phi = (this.p.subtract(one)).multiply(this.q.subtract(one));
+        this.n = this.p.multiply(this.q);
+        this.e = BigInteger.probablePrime(N / 2, random);
+        while (this.phi.gcd(this.e).compareTo(one) > 0 && this.e.compareTo(this.phi) < 0)
+        {
+            this.e.add(this.one);
+        }
+        this.d = this.e.modInverse(phi);
+    }
+
+    // Encrypt the given plaintext message.Use public key decryp
+    public synchronized String encrypt(String message) {
+        return (new BigInteger(message.getBytes())).modPow(e, n).toString();
+    }
+
+    //Encrypt the given plaintext message.Use public key decrypt
+    public synchronized BigInteger encrypt(BigInteger message) {
+        return message.modPow(e, n);
+    }
+
+    // Decrypt the given ciphertext message.Use private key decrypt
+    public synchronized String decrypt(String message) {
+        return new String((new BigInteger(message)).modPow(d, n).toByteArray());
+    }
+
+    // Decrypt the given ciphertext message.Use private key decrypt
+    public synchronized BigInteger decrypt(BigInteger message) {
+        return message.modPow(d, n);
+    }
+
+    public BigInteger getP() {
         return p;
     }
 
-    public void setP(int p) {
+    public void setP(BigInteger p) {
         this.p = p;
     }
 
-    public int getQ() {
+    public BigInteger getQ() {
         return q;
     }
 
-    public void setQ(int q) {
+    public void setQ(BigInteger q) {
         this.q = q;
     }
 
-    public long getN() {
+    public BigInteger getN() {
         return n;
     }
 
-    public void setN(long n) {
+    public void setN(BigInteger n) {
         this.n = n;
     }
 
-    public GenerateKeys() {
-        this.p = 0;
-        this.q = 0;
-        this.n = 0;
+    public BigInteger getE() {
+        return this.e;
     }
 
-    public void get_p_q() {
-        while(this.p == this.q) {
-            this.q = this.get_Primenumber();
-            this.p = this.get_Primenumber();
-        }
+    public void setE(BigInteger e) {
+        this.e = e;
     }
 
-    //Get prime number
-    public int get_Primenumber() {
-        int num = 0;
-        Random rand = new Random(); // generate a random number
-        num = rand.nextInt(1000) + 1;
-        while (!isPrime(num)) {
-            num = rand.nextInt(1000) + 1;
-        }
-        return num;
+    public BigInteger getD() {
+        return this.d;
     }
 
-    //Generate RSA keys
-    public void keyRSA() {
-        this.n = this.q * this.p;
-        long m = (this.p - 1)*(this.p - 1);
-        boolean found = false;
-        do {
-            long e = Functions.getRandomNumber(1, m);
-            if(Functions.GCD(m, e) == 1) {
-                found = true;
-            }
-        } while(!found);
+    public void setD(BigInteger d) {
+        this.d = d;
     }
-
-    //Check prime number
-    public static boolean isPrime(int inputNum){
-        if (inputNum <= 3 || inputNum % 2 == 0)
-            return inputNum == 2 || inputNum == 3; //this returns false if number is <=1 & true if number = 2 or 3
-        int divisor = 3;
-        while ((divisor <= Math.sqrt(inputNum)) && (inputNum % divisor != 0))
-            divisor += 2; //iterates through all possible divisors
-        return inputNum % divisor != 0; //returns true/false
-    }
+    
 }
