@@ -56,20 +56,12 @@ public class GenerateKeys {
         return (new BigInteger(message.getBytes())).modPow(e, n).toString();
     }
 
-    //Encrypt the given plaintext message.Use public key decrypt
-//    public synchronized BigInteger encrypt(byte[] message) {
-//        return message.modPow(e, n);
-//    }
-
     // Decrypt the given ciphertext message.Use private key decrypt
     public synchronized String decrypt(String message) {
         return new String((new BigInteger(message)).modPow(d, n).toByteArray());
     }
 
     // Decrypt the given ciphertext message.Use private key decrypt
-    public synchronized BigInteger decrypt(BigInteger message) {
-        return message.modPow(d, n);
-    }
 
     public BigInteger getP() {
         return p;
