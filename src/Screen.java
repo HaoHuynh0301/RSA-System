@@ -4,6 +4,7 @@ import libs.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 public class Screen extends JFrame {
@@ -17,9 +18,19 @@ public class Screen extends JFrame {
     private JTextField txt_public_key;
     private JButton btn_Createkey;
     private JButton btn_Random;
+    private JButton btn_Sign;
+    private JButton btn_Export;
+    private JPanel pannel_encrypt_1;
+    private JTextField txt_Filepath;
+    private JTextField textField2;
+    private JButton btn_Select;
     private BigInteger public_key = new BigInteger("0");
     private BigInteger private_key = new BigInteger("0");
-    public GenerateKeys g;
+    private GenerateKeys g;
+    private String filepath;
+    private String encrypt_file;
+    private String decrypt_file;
+    private String filename;
 
     public Screen() {
         btn_showpass.setIcon(new ImageIcon(getClass().getResource("/media/icons8-show-password-50.png")));
@@ -28,13 +39,13 @@ public class Screen extends JFrame {
         btn_Random.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GenerateKeys g = new GenerateKeys(1024);
+                g = new GenerateKeys(1024);
                 private_key = g.getE();
                 public_key = g.getD();
                 txt_public_key.setText(""); txt_pass.setText("");
                 txt_p.setText(g.getP()+"");
                 txt_q.setText(g.getQ()+"");
-            }
+             }
         });
 
         //Event when we click the button to generate 2 keys
@@ -56,6 +67,49 @@ public class Screen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 txt_pass.setText(private_key+"");;
+            }
+        });
+
+        //Event when we click the button to select file
+        btn_Select.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser file = new JFileChooser();
+                file.setMultiSelectionEnabled(true);
+                file.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                file.setFileHidingEnabled(false);
+                if (file.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    java.io.File f = file.getSelectedFile();
+                    filepath = f.getPath();
+                    txt_Filepath.setText(f.getPath());
+                }
+            }
+        });
+
+        //Event when we click the button to export the result
+        btn_Export.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                filename = Functions.readFileAsString(filepath);
+                String encrypt = g.encrypt(filename);
+                String decrypt = g.decrypt(encrypt);
+                if(filename.equals(decrypt)) {
+                    System.out.println("true");
+                } else System.out.println("false");
+            }
+        });
+
+        //Event when we click the button the sign text
+        btn_Sign.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if("".equals(filename)) {
+                    JOptionPane.showMessageDialog(null, "Chọn file trước khi mã hóa", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    String filename = Functions.readFileAsString(filepath);
+                    String encrypt = g.encrypt(filename);
+                }
             }
         });
     }

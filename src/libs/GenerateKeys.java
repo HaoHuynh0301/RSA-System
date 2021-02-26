@@ -57,9 +57,9 @@ public class GenerateKeys {
     }
 
     //Encrypt the given plaintext message.Use public key decrypt
-    public synchronized BigInteger encrypt(BigInteger message) {
-        return message.modPow(e, n);
-    }
+//    public synchronized BigInteger encrypt(byte[] message) {
+//        return message.modPow(e, n);
+//    }
 
     // Decrypt the given ciphertext message.Use private key decrypt
     public synchronized String decrypt(String message) {
