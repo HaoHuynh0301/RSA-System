@@ -132,6 +132,7 @@ public class Screen extends JFrame {
                 try {
                     writer.write(decrypt_file);
                     writer.close();
+                    JOptionPane.showMessageDialog(null, "Lưu thành công", "Thông báo", JOptionPane.ERROR_MESSAGE);
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -150,6 +151,7 @@ public class Screen extends JFrame {
                 try {
                     writer.write(encrypt_file);
                     writer.close();
+                    JOptionPane.showMessageDialog(null, "Lưu thành công", "Thông báo", JOptionPane.ERROR_MESSAGE);
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
