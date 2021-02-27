@@ -1,6 +1,10 @@
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+
 import libs.*;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -30,6 +34,7 @@ public class Screen extends JFrame {
     private JTextField txt_decrypt_file;
     private JButton btn_Export_2;
     private JButton btn_Decrypt;
+    private JPanel pannel_decrypt;
     private BigInteger public_key = new BigInteger("0");
     private BigInteger private_key = new BigInteger("0");
     private GenerateKeys g;
@@ -44,7 +49,8 @@ public class Screen extends JFrame {
 
     public Screen() {
 
-        btn_showpass.setIcon(new ImageIcon(getClass().getResource("/media/icons8-show-password-50.png")));
+        createLineBorder();
+
         //Event when we click the button to make 2 random numbers - p and q
         btn_Random.addActionListener(new ActionListener() {
             @Override
@@ -189,6 +195,30 @@ public class Screen extends JFrame {
                 }
             }
         });
+    }
+
+    private void createLineBorder() {
+        txt_pass.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        txt_p.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        txt_q.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        btn_Random.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        btn_Createkey.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        txt_Filepath.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        txt_Filepath_2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        txt_encrypt_file.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        txt_decrypt_file.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        btn_Export_2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        btn_Export.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        btn_Sign.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        btn_Decrypt.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        btn_showpass.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        btn_showpass.setIcon(new ImageIcon(getClass().getResource("/media/icons8-show-password-50.png")));
+        pannel_create_key.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(), "Sinh khóa", TitledBorder.LEFT, TitledBorder.TOP));
+        pannel_encrypt_1.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(), "Ký văn bản", TitledBorder.LEFT, TitledBorder.TOP));
+        pannel_decrypt.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(), "Xác thực chữ ký", TitledBorder.LEFT, TitledBorder.TOP));
     }
 
     public static void main(String args[]) {
