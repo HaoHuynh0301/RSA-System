@@ -125,7 +125,7 @@ public class Screen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 BufferedWriter writer = null;
                 try {
-                    writer = new BufferedWriter(new FileWriter("D:\\RSA_Project\\src\\result\\Decrypt.txt")); //Your folder's path that you wanna save
+                    writer = new BufferedWriter(new FileWriter("result/Decrypt.txt")); //Your folder's path that you wanna save
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -144,7 +144,7 @@ public class Screen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 BufferedWriter writer = null;
                 try {
-                    writer = new BufferedWriter(new FileWriter("D:\\RSA_Project\\src\\result\\Encrypt.txt")); //Your folder's path that you wanna save
+                    writer = new BufferedWriter(new FileWriter("result/Encrypt.txt")); //Your folder's path that you wanna save
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
